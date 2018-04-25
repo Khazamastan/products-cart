@@ -46,8 +46,8 @@ class App extends React.Component {
     return (
       <AppWrapper>
         <Helmet
-          titleTemplate="%s - The Audio DB"
-          defaultTitle="The Audio DB"
+          titleTemplate="%s - Product Cart"
+          defaultTitle="Product Cart"
         >
         </Helmet>
         <h1>Masala's and Spices </h1>
