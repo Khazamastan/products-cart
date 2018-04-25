@@ -21,6 +21,19 @@ const Wrapper = styled.div`
     p{
       margin: 0;
     }
+    
+    .summary{
+        padding: 0 0 20px 0;
+        div{
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        strong{
+            display: inline-block; 
+            padding: 10px 0;
+        }
+        }
+    }
     .item {
       display: inline-block;
       margin: 0;
