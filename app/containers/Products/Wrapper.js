@@ -4,7 +4,7 @@ const Wrapper = styled.div`
     float: left;
     flex-wrap: wrap;
     display: flex;
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 840px) {
         order: 1;
         width: 100%;
         margin : 10px;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
           max-width: 33.3%;
           min-width: 33.3%;
         }
-        @media only screen and (max-width: 768px) {
+        @media only screen and (max-width: 840px) {
           max-width: 50%;
           min-width: 50%;
         }
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
           border-radius: 3px;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
           display: inline-block;
-          @media only screen and (max-width: 768px) {
+          @media only screen and (max-width: 840px) {
           margin : 0px !important;
         }
         margin: 0 0px 10px 0px;

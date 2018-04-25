@@ -45,7 +45,7 @@ injectGlobal`
     margin: 0px auto;
     display: flex;
     align-items: flex-start;
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 840px) {
       flex-wrap : wrap;
     }
   }

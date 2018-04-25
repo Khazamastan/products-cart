@@ -7,7 +7,7 @@ const Wrapper = styled.div`
     background: #fff;
     padding: 10px 20px;
     transition : all 0.3s ease-in;
-    @media only screen and (max-width: 786px) {
+    @media only screen and (max-width: 840px) {
         order: 0;
         width: 100%;
         margin : 10px;
