@@ -1,6 +1,25 @@
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+export const OuterWrapper = styled.div`
+    margin : 0 20px 10px 0;
+    .view-mode {
+      height : 40px;
+      display : flex;
+      align-items : center;
+      a{
+        cursor: pointer;
+        padding-right : 10px;
+        &:last-child{
+          padding-left : 10px;
+        }
+      }
+      a.active{
+        font-weight: bold;
+      }
+    }
+`
+
+export const Wrapper = styled.div`
     float: left;
     flex-wrap: wrap;
     display: flex;
@@ -10,7 +29,7 @@ const Wrapper = styled.div`
         margin : 10px;
     }
     .product-box{
-        width: calc(25% - 10px);
+        width: 25%;
         padding : 5px;
         @media only screen and (max-width: 1024px) {
           max-width: 33.3%;
@@ -25,48 +44,81 @@ const Wrapper = styled.div`
           height: 100%;
           background-color: #fff;
           border-radius: 3px;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+          border : 1px solid #f5f5f5;
+          // box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
           display: inline-block;
           @media only screen and (max-width: 840px) {
-          margin : 0px !important;
-        }
+           margin : 0px !important;
+          }
         margin: 0 0px 10px 0px;
         position: relative;
+        .img-container{
+          display: flex;
+          height : 180px;
+        }
         img {
-          width: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          margin: auto;
+          display: block;
         }
         .desc{
-          padding: 15px 0 10px 0;
+          padding: 0 15px;
         }
         h2 {
           margin-left: 20px;
         }
         p {
-          margin: 0 0 5px 20px;
+          margin: 0 0 5px 0px;
           text-align:center;
         }
+      }
+      .no-stock{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color : #ff5555;
       }
       .add-to-cart{
           padding-top: 10px;
       }
-      .add-to-cart-input{
+        .add-to-cart-input{
           display: flex;
           justify-content: center;
+          padding-bottom: 10px;
           padding-top: 10px;
           border-radius : 3px;
           input{
-          width: 50px;
-          border: 1px solid #5585b9;
-          text-align :center;
+            width: 50px;
+            text-align :center;
           }
-          button:first-child{
-          border-radius : 3px 0 0 3px;
+          button{
+            border-radius: 50px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            padding: 0;
+            background : transparent;
+            border : 1px solid #ff5555;
+            color : #ff5555;
           }
-          button:last-child{
-          border-radius : 0 3px 3px 0;
+      }
+      &.row{
+        width : 100%;
+        .box{
+          display : flex;
+          .img-container{
+            height : 80px;
+            padding : 10px;
+            align-items : center;
           }
+          p{
+            text-align: left;
+          }
+          .add-to-cart-input{
+            padding-top: 10px;
+            justify-content: flex-start;
+          }
+        }
       }
     }
   `;
-
-export default Wrapper;

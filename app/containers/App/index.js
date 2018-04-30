@@ -18,12 +18,14 @@ import { Helmet } from 'react-helmet';
 import { push } from 'react-router-redux';
 import reducer from '../App/reducer';
 import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
 import { makeSelectGetCartItems } from "./selectors";
 //components
 // Import route containers
 import Products from 'containers/Products';
 import Cart from 'containers/Cart';
-
+import saga from "./saga";
+import { getLoadProducts } from "./actions";
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -50,14 +52,17 @@ class App extends React.Component {
           defaultTitle="Product Cart"
         >
         </Helmet>
-        <h1>Masala's and Spices </h1>
+        <h1>Products</h1>
         <div id="app">
           <Products/>
-          {cartItems.length ? <Cart/> : null}
+          <Cart/>
         </div>
 
       </AppWrapper>
     );
+  }
+  componentDidMount(){
+    this.props.loadProducts();
   }
 }
 
@@ -66,23 +71,26 @@ App.contextTypes = {
   router: PropTypes.object
 };
 
-
-App.propTypes = {
-  modalIsOpen: PropTypes.bool,
-};
-
+export function mapDispatchToProps(dispatch) {
+  return {
+    dispatch: dispatch,
+    loadProducts: () => {
+      dispatch(getLoadProducts());
+    }
+  }
+}
 
 const mapStateToProps = createStructuredSelector({
   cartItems : makeSelectGetCartItems()
 });
 
-
+const withSaga = injectSaga({ key: 'App', saga });
 const withReducer = injectReducer({ key: 'App', reducer });
-
-const withConnect = connect(mapStateToProps);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 
 export default withRouter(compose(
+  withSaga,
   withReducer,
   withConnect
 )(App));

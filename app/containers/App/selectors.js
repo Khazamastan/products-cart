@@ -16,10 +16,41 @@ const makeSelectGetCartItems = () => createSelector(
   (globalState) => globalState.get('cartItems')
 );
 
+const makeSelectGetSortBy = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('sortBy')
+);
+
+
+const makeSelectGetCurrentPage = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('currentPage')
+);
+
+const makeSelectGetLoadMore = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('loadProducts')
+);
+
+const makeSelectFetchProducts = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('fetchingProducts')
+);
+
+const makeSelectGetMode = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('mode')
+);
+
 
 
 
 export {
   makeSelectGetProducts,
-  makeSelectGetCartItems
+  makeSelectGetCartItems,
+  makeSelectGetSortBy,
+  makeSelectGetCurrentPage,
+  makeSelectGetLoadMore,
+  makeSelectFetchProducts,
+  makeSelectGetMode
 };

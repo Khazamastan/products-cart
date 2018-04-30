@@ -16,8 +16,14 @@
  */
 
 import {
+    LOAD_PRODUCTS,
+    LOAD_PRODUCTS_SUCCESS,
+    LOAD_MORE_PRODUCTS,
+    LOAD_MORE_PRODUCTS_SUCCESS,
+    SORT_BY,
     QTY_DECREMENT,
     QTY_INCREMENT,
+    CHANGE_DISPLAY_MODE,
     REMOVE_ITEM,
     CHANGE_QTY
   } from './constants';
@@ -62,5 +68,68 @@ import {
     };
   }
   
-
+  /**
+   * Load initial products list
+  */
+  export function getLoadProducts(sortBy){
+    return {
+      type: LOAD_PRODUCTS,
+      sortBy
+    };
+  }
   
+
+  /**
+   * Load initial products list success
+  */
+  export function getLoadProductsSuccess(data){
+    return {
+      type: LOAD_PRODUCTS_SUCCESS,
+      data
+    };
+  }
+  
+  /**
+   * Load more products list
+  */
+  export function getLoadMoreProducts(currentPage){
+    return {
+      type: LOAD_MORE_PRODUCTS,
+      currentPage
+    };
+  }
+  
+
+  /**
+   * Load more products list
+  */
+  export function getLoadMoreProductsSuccess(products, currentPage){
+    return {
+      type: LOAD_MORE_PRODUCTS_SUCCESS,
+      products,
+      currentPage
+    };
+  }
+
+
+/**
+   * set No More Products
+  */
+ export function setNoMoreProducts(products){
+  return {
+    type: SET_NO_PRODUCTS,
+    products
+  };
+}
+
+
+/**
+   * set display mode
+  */
+ export function changeMode(mode){
+  return {
+    type: CHANGE_DISPLAY_MODE,
+    mode
+  };
+}
+

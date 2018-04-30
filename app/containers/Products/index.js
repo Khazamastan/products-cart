@@ -4,53 +4,38 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectGetCartItems, makeSelectGetProducts } from "containers/App/selectors";
+import {
+  makeSelectGetCartItems,
+  makeSelectGetProducts,
+  makeSelectGetSortBy,
+  makeSelectGetCurrentPage,
+  makeSelectGetLoadMore,
+  makeSelectFetchProducts,
+  makeSelectGetMode
+} from "containers/App/selectors";
 import styled from 'styled-components';
-import { increment, decrement, changeQunatity } from "containers/App/actions";
-import Wrapper from "./Wrapper";
+import {
+  increment,
+  decrement,
+  changeQunatity,
+  getLoadProducts,
+  getLoadMoreProducts,
+  changeMode
+} from "containers/App/actions";
+import { OuterWrapper, Wrapper } from "./Wrapper";
+import Product from "components/Product";
 
 class ProductsPage extends React.Component {
   constructor(props) {
     super(props);
   }
-  render() {
-    var { products, cartItems } = this.props;
-    cartItems = cartItems.toArray();
-    cartItems = _.keyBy(cartItems, "id");
-
-    const userListContent = (
-      <Wrapper>
-        {products.map((item_data, i) => {
-          const id = item_data._id;
-          const inCart = cartItems[id];
-          return (
-            <div className="product-box" key={i}>
-              <div className="box">
-                <img src={item_data.img} />
-                <div className="desc">
-                  <p>{item_data.brandName}</p>
-                  <p><strong>{item_data.productName}</strong></p>
-                  <p>{item_data.desc}</p>
-                  <p><strong>Rs {item_data.price}</strong></p>
-                  {!(inCart && inCart.qty) ?
-                    <p className='add-to-cart'>
-                      <button className="btn" onClick={this.addQuantity.bind(this, id)}>Add To Cart</button>
-                    </p>
-                    :
-                    <p className="add-to-cart-input">
-                      <button className="btn" onClick={this.removeQuantity.bind(this, id)}>-</button>
-                      <input type="number" value={inCart.qty} onChange={this.changeQunatity.bind(this, id)} />
-                      <button className="btn" onClick={this.addQuantity.bind(this, id)}>+</button>
-                    </p>
-                  }
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </Wrapper>);
-
-    return userListContent;
+  onChangeFilter = (e) => {
+    const value = e.target.value;
+    this.addScrollEvent();
+    this.props.loadProducts(value);
+  }
+  getPrice(item) {
+    return Math.round(item.mrp * (100 / item.discount), 2);
   }
   addQuantity(id) {
     this.props.increment(id)
@@ -63,16 +48,82 @@ class ProductsPage extends React.Component {
     if (qty)
       this.props.changeQunatity(id, qty)
   }
+  onScroll = _.debounce(() => {
+    var { hasLoadMore, currentPage, loadMoreProducts, fetchingProducts } = this.props;
+    // if (!fetchingProducts) {
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 300)) {
+      if (hasLoadMore) {
+        currentPage = currentPage || 1;
+        currentPage++;
+        loadMoreProducts(currentPage);
+      } else {
+        this.removeScrollEvent();
+      }
+    }
+    // }
+  }, 100);
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.addScrollEvent()
+  }
+  addScrollEvent() {
+    window.addEventListener('scroll', this.onScroll, false);
+  }
+  removeScrollEvent() {
+    window.removeEventListener('scroll', this.onScroll, false);
+  }
+  componentWillUnmount() {
+    this.removeScrollEvent();
+  }
+  changeMode(mode){
+    this.props.changeMode(mode)
+  }
+  render() {
+    var { data, cartItems, mode } = this.props;
+    var products = data.products || [];
+    var sortby = (data && data.sort.options) || {};
+    cartItems = cartItems.toArray();
+    cartItems = _.keyBy(cartItems, "id");
+
+    const userListContent = (
+      <OuterWrapper>
+        <div>
+          <div className="pull-left view-mode">
+            <a className={mode == "grid" ? "active" : ""} onClick={this.changeMode.bind(this, "grid")}>Grid</a> | 
+            <a className={mode == "row" ? "active" : ""} onClick={this.changeMode.bind(this, "row")}>Row</a>
+          </div>
+          <select className="pull-right" onChange={this.onChangeFilter}>
+            {_.keys(sortby).map((sortItem) => {
+              return <option key={sortItem} value={sortItem}>{sortby[sortItem]}</option>
+            })}
+          </select>
+        </div>
+        <Wrapper>
+          {products.map((item_data, i) => {
+            const id = item_data.id;
+            const inCart = cartItems[id];
+            var item = item_data.defaultVariant;
+            return (
+              <Product
+                key={id}
+                i={i}
+                inCart={inCart}
+                item={item}
+                mode={mode}
+                item_data={item_data}
+                getPrice={this.getPrice}
+                removeQuantity={this.removeQuantity.bind(this, id)}
+                changeQunatity={this.changeQunatity.bind(this, id)}
+                addQuantity={this.addQuantity.bind(this, id)}
+              />)
+          })}
+        </Wrapper>
+      </OuterWrapper>);
+
+    return userListContent;
+  }
 }
-
-
-
-ProductsPage.propTypes = {
-  products: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-  ]),
-};
 
 export function mapDispatchToProps(dispatch) {
   return {
@@ -85,13 +136,27 @@ export function mapDispatchToProps(dispatch) {
     },
     changeQunatity: (id, qty) => {
       dispatch(changeQunatity(id, qty));
+    },
+    loadProducts: (sortBy) => {
+      dispatch(getLoadProducts(sortBy));
+    },
+    loadMoreProducts: (page) => {
+      dispatch(getLoadMoreProducts(page));
+    },
+    changeMode: (mode) => {
+      dispatch(changeMode(mode));
     }
   }
 }
 
 const mapStateToProps = createStructuredSelector({
-  products: makeSelectGetProducts(),
-  cartItems: makeSelectGetCartItems()
+  data: makeSelectGetProducts(),
+  cartItems: makeSelectGetCartItems(),
+  sortBy: makeSelectGetSortBy(),
+  currentPage: makeSelectGetCurrentPage(),
+  hasLoadMore: makeSelectGetLoadMore(),
+  fetchingProducts: makeSelectFetchProducts(),
+  mode : makeSelectGetMode()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

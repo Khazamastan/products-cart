@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
     min-width: 300px;
+    border : 1px solid #f5f5f5;
     border-radius: 3px;
     overflow: hidden;
     background: #fff;
@@ -15,6 +16,7 @@ const Wrapper = styled.div`
     #head {
       width: 100%;
       border-bottom: 1px solid #f5f5f5;
+      padding-bottom : 10px;
       display: flex;
       align-items: flex-start;
     }

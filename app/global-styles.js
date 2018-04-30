@@ -2,11 +2,9 @@ import { injectGlobal } from 'styled-components';
 
 /* eslint no-unused-expressions: 0 */
 injectGlobal`
-  html,
-  body {
-    height: 100%;
+  html,body{
     width: 100%;
-    background-color: #eee;
+    background-color: #fff;
     font-family: calibri, sans-serif;
   }
   body {
@@ -79,5 +77,17 @@ injectGlobal`
 
 .bold{
   font-weight: bold;
+}
+select{
+  padding: 10px 20px;
+  background: #fff;
+  width: 200px;
+  margin-bottom : 20px;
+  border : 1px solid #f5f5f5;
+}
+.strike{
+  display : inline-block;
+  padding-left : 5px;
+  text-decoration : line-through;
 }
 `;

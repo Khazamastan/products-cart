@@ -39,7 +39,7 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-const server_url = 'http://www.theaudiodb.com/api/v1/json/1/';
+const server_url = 'https://www.zopnow.com/';
 function _makeUrl (path){
   return server_url + path;
 }
